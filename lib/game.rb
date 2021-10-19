@@ -1,10 +1,10 @@
 class Game
   attr_accessor :player, :ennemies
 
-  def initialize
+  def initialize(n_ennemies)
     begin_display()
-    @player = init_user
-    @ennemies = init_ennemies(1)
+    @player = init_user()
+    @ennemies = init_ennemies(n_ennemies)
     count_display()
   end
 

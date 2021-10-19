@@ -7,7 +7,7 @@ require_relative 'lib/player'
 require_relative 'lib/colorizeString'
 
 def start
-  game = Game.new
+  game = Game.new(4)
   game.show_players
   while game.is_still_ongoing?
     game.menu
