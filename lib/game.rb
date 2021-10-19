@@ -2,8 +2,10 @@ class Game
   attr_accessor :player, :ennemies
 
   def initialize
+    begin_display()
     @player = init_user
-    @ennemies = init_ennemies(4)
+    @ennemies = init_ennemies(1)
+    count_display()
   end
 
   def kill_player(id_ennemy)
@@ -11,7 +13,36 @@ class Game
   end
 
   def is_still_ongoing?
-    @player.life_points > 0 && ennemies != [] ? true : false
+    @player.life_points > 0 && @ennemies != [] ? true : false
+  end
+
+  def begin_display
+    system('clear')
+    title_art = File.read("#{__dir__}/../assets/poofighter.txt")
+    puts title_art.red
+    puts puts
+    puts " Affrontes les personnages du terminal dans un combat à mort !".bold
+    puts puts
+    sleep 1.5
+  end
+
+  def count_display
+    system('clear')
+    print "\n" * 4
+    puts "Prêt à combattre !".bold
+    sleep 1
+    system('clear')
+    print "\n" * 4
+    puts File.read("#{__dir__}/../assets/three.txt").red
+    sleep 1
+    system('clear')
+    print "\n" * 4
+    puts File.read("#{__dir__}/../assets/two.txt").red
+    sleep 1
+    system('clear')
+    print "\n" * 4
+    puts File.read("#{__dir__}/../assets/one.txt").red
+    sleep 1
   end
 
   def show_players
@@ -29,11 +60,13 @@ class Game
     puts
     @ennemies.each {|ennemy| puts ennemy.show_state ; puts}
     puts "-" * (18 * 7)
+    puts "                                                                      Appuie sur la touche ENTER"
     gets.chomp
     system('clear')
   end
 
   def menu
+    system('clear')
     puts "                         C'est à ton tour de jouer !".bold
     puts puts
     puts @player.show_state
@@ -42,6 +75,7 @@ class Game
     puts
     puts "a".magenta + ": Attaquer    " + "s".magenta + " : Chercher une arme    " + "h".magenta + " : Chercher du soin     " + "e".magenta + " : voir l'état de la partie"
     print "> "
+    menu_choice()
   end
 
   def menu_choice
@@ -81,21 +115,25 @@ class Game
           kill_player(input_ennemy)
         end
       else
-        puts "Attends cet ennemie n'est pas encore là, il arrive t'inquiète !".gray
+        puts "Attends, cet ennemie n'est pas encore là, il arrive t'inquiète !".gray
         sleep 1.5
         attack_action()
       end
   end
 
   def ennemy_attacks
-    system('clear')
-    puts "                         C'est au tour des ennemies de t'attaquer !".bold
-    @ennemies.each do |ennemy|
-      ennemy.attacks(@player)
+    unless @ennemies == [] then
+      system('clear')
+      puts "                         C'est au tour des ennemies de t'attaquer !".bold
       sleep 1.5
-      if @player.life_points <= 0
-        puts puts
-        puts "Tu es mort !".red.blink
+      @ennemies.each do |ennemy|
+        ennemy.attacks(@player)
+        sleep 1.5
+        if @player.life_points <= 0
+          puts puts
+          puts "Tu es mort !".red.blink
+          break
+        end
       end
     end
   end
@@ -108,7 +146,7 @@ class Game
   end
 
   def init_ennemies(number)
-    list_name_ennemies = ["Acolyte du Crépuscule d'Argent", "Goule de Cimetière", "Serpent de Yig", "Guetteur d'une Autre Dimension"]
+    list_name_ennemies = ["Acolyte du Crépuscule d'Argent", "Goule de Cimetière", "Serpent de Yig", "Guetteur d'une Autre Dimension","Bête Déchaînée", "Bête Sacrificielle", "Agents de l'Ombre"]
     ennemies = Array.new()
     list_name_ennemies.sample(number).each do |name|
       ennemies.push(Player.new(name))

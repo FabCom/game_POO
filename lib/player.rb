@@ -14,7 +14,7 @@ class Player
     self.life_points -= damages
     if self.life_points <= 0
       puts puts
-      puts "#{self.name} a été tué"
+      puts "#{self.name} a été tué".red
       self.life_points = 0
     end
   end
@@ -41,7 +41,7 @@ class HumanPlayer < Player
   end
 
   def show_state
-    return "#{self.name} a " + "#{self.life_points}".green + " points de vie et une arme de niveau #{self.weapon_level}"
+    return "#{self.name} a " + "#{self.life_points}".green + " points de vie et une arme de niveau " + "#{self.weapon_level}".blue
   end
 
   def compute_damage
